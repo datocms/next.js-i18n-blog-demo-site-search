@@ -40,6 +40,43 @@ async function vercelInitialization(
   );
 }
 
+async function netlifyInitialization(
+  netlifySiteId,
+  netlifyToken,
+  buildTriggerId,
+  siteSearchToken
+) {
+  await fetch(`https://api.netlify.com/api/v1/sites/${netlifySiteId}`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${netlifyToken}`,
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      build_settings: {
+        env: { NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID: buildTriggerId },
+      },
+    }),
+  });
+
+  await fetch(`https://api.netlify.com/api/v1/sites/${netlifySiteId}`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${netlifyToken}`,
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      build_settings: {
+        env: {
+          NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH: siteSearchToken,
+        },
+      },
+    }),
+  });
+}
+
 export default async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST");
@@ -82,7 +119,12 @@ export default async (req, res) => {
     }
 
     if (req.body.integrationInfo.adapter === "netlify") {
-      console.log("not yet"); //TODO
+      await netlifyInitialization(
+        req.body.integrationInfo.netlifySiteId,
+        req.body.integrationInfo.netlifyToken,
+        buildTriggerId,
+        siteSearchToken
+      );
     }
 
     return res.status(200).json({ success: siteSearchToken });
