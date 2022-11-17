@@ -8,7 +8,7 @@ export default function Search() {
 
   useEffect(() => {
     if (term) {
-      searchedValue.current.value = term; //don't
+      searchedValue.current.value = term;
     }
   }, []);
 
