@@ -15,7 +15,7 @@ The purpose of this repo is to have a quick start reference that can be set up w
 
 3. Let DatoCMS set everything up for you clicking this button:
 
-  [![Deploy with DatoCMS](https://dashboard.datocms.com/deploy/button.svg)](https://dashboard.datocms.com/deploy?repo=datocms/nextjs-demo-i18n)
+  [![Deploy with DatoCMS](https://dashboard.datocms.com/deploy/button.svg)](https://dashboard.datocms.com/deploy?repo=marcelofinamorvieira/next.js-i18n-blog-demo-site-search)
 
 ### Local setup
 
