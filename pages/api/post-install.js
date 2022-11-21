@@ -7,29 +7,26 @@ async function vercelInitialization(
   buildTriggerId,
   siteSearchToken
 ) {
-  await fetch(
-    `https://api.vercel.com/v10/projects/${vercelProjectId}/env?teamId=${vercelTeamId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${vercelApiToken}`,
+  await fetch(`https://api.vercel.com/v10/projects/${vercelProjectId}/env`, {
+    headers: {
+      Authorization: `Bearer ${vercelApiToken}`,
+    },
+    method: "post",
+    body: JSON.stringify([
+      {
+        type: "encrypted",
+        key: "NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID",
+        value: buildTriggerId,
+        target: ["development", "production", "preview"],
       },
-      method: "post",
-      body: JSON.stringify([
-        {
-          type: "encrypted",
-          key: "NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID",
-          value: buildTriggerId,
-          target: ["development", "production", "preview"],
-        },
-        {
-          type: "encrypted",
-          key: "NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH",
-          value: siteSearchToken,
-          target: ["development", "production", "preview"],
-        },
-      ]),
-    }
-  );
+      {
+        type: "encrypted",
+        key: "NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH",
+        value: siteSearchToken,
+        target: ["development", "production", "preview"],
+      },
+    ]),
+  });
 }
 
 async function netlifyInitialization(
@@ -95,8 +92,6 @@ export default async (req, res) => {
         buildTriggerId,
         siteSearchToken
       );
-
-      await client.buildTriggers.trigger(buildTriggerId); //to test if we're getting into this IF
     }
 
     if (req.body.integrationInfo.adapter === "netlify") {
@@ -108,6 +103,8 @@ export default async (req, res) => {
         siteSearchToken
       );
     }
+
+    await client.buildTriggers.trigger(buildTriggerId);
 
     return res.status(200).json({ success: siteSearchToken });
   } catch (error) {
