@@ -33,6 +33,7 @@ async function vercelInitialization(
 }
 
 async function netlifyInitialization(
+  apiToken,
   netlifySiteId,
   netlifyToken,
   buildTriggerId,
@@ -47,7 +48,8 @@ async function netlifyInitialization(
     method: "PUT",
     body: JSON.stringify({
       build_settings: {
-        env: { 
+        env: {
+          NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN: apiToken,
           NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID: buildTriggerId,
           NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH: siteSearchToken,
         },
@@ -99,13 +101,14 @@ export default async (req, res) => {
 
     if (req.body.integrationInfo.adapter === "netlify") {
       await netlifyInitialization(
+        req.body.datocmsApiToken,
         req.body.integrationInfo.netlifySiteId,
         req.body.integrationInfo.netlifyToken,
         buildTriggerId,
         siteSearchToken
       );
     }
-    
+
     await client.buildTriggers.trigger(buildTriggerId);
 
     return res.status(200).json({ success: siteSearchToken });
