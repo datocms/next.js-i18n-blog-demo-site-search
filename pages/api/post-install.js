@@ -14,28 +14,20 @@ async function vercelInitialization(
         Authorization: `Bearer ${vercelApiToken}`,
       },
       method: "post",
-      body: JSON.stringify({
-        type: "encrypted",
-        key: "NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID",
-        value: buildTriggerId,
-        target: ["development", "production", "preview"],
-      }),
-    }
-  );
-
-  await fetch(
-    `https://api.vercel.com/v10/projects/${vercelProjectId}/env?teamId=${vercelTeamId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${vercelApiToken}`,
-      },
-      method: "post",
-      body: JSON.stringify({
-        type: "encrypted",
-        key: "NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH",
-        value: siteSearchToken,
-        target: ["development", "production", "preview"],
-      }),
+      body: JSON.stringify([
+        {
+          type: "encrypted",
+          key: "NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID",
+          value: buildTriggerId,
+          target: ["development", "production", "preview"],
+        },
+        {
+          type: "encrypted",
+          key: "NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH",
+          value: siteSearchToken,
+          target: ["development", "production", "preview"],
+        },
+      ]),
     }
   );
 }
@@ -55,21 +47,8 @@ async function netlifyInitialization(
     method: "PUT",
     body: JSON.stringify({
       build_settings: {
-        env: { NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID: buildTriggerId },
-      },
-    }),
-  });
-
-  await fetch(`https://api.netlify.com/api/v1/sites/${netlifySiteId}`, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${netlifyToken}`,
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      build_settings: {
-        env: {
+        env: { 
+          NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID: buildTriggerId,
           NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH: siteSearchToken,
         },
       },
@@ -126,6 +105,8 @@ export default async (req, res) => {
         siteSearchToken
       );
     }
+    
+    await client.buildTriggers.trigger(buildTriggerId);
 
     return res.status(200).json({ success: siteSearchToken });
   } catch (error) {
