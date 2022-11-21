@@ -88,7 +88,7 @@ export default async (req, res) => {
       await vercelInitialization(
         req.body.integrationInfo.vercelProjectId,
         req.body.integrationInfo.vercelTeamId,
-        req.body.integrationInfo.vercelProjectId,
+        req.body.integrationInfo.vercelApiToken,
         buildTriggerId,
         siteSearchToken
       );
