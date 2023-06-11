@@ -1,4 +1,4 @@
-import { buildClient } from "@datocms/cma-client-node";
+import { buildClient } from '@datocms/cma-client-node';
 
 async function vercelInitialization(
   vercelProjectId,
@@ -11,19 +11,19 @@ async function vercelInitialization(
     headers: {
       Authorization: `Bearer ${vercelApiToken}`,
     },
-    method: "post",
+    method: 'post',
     body: JSON.stringify([
       {
-        type: "encrypted",
-        key: "NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID",
+        type: 'encrypted',
+        key: 'NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID',
         value: buildTriggerId,
-        target: ["development", "production", "preview"],
+        target: ['development', 'production', 'preview'],
       },
       {
-        type: "encrypted",
-        key: "NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH",
+        type: 'encrypted',
+        key: 'NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH',
         value: siteSearchToken,
-        target: ["development", "production", "preview"],
+        target: ['development', 'production', 'preview'],
       },
     ]),
   });
@@ -34,38 +34,47 @@ async function netlifyInitialization(
   netlifySiteId,
   netlifyToken,
   buildTriggerId,
-  siteSearchToken
+  siteSearchToken,
+  netlifyAccountId
 ) {
-  await fetch(`https://api.netlify.com/api/v1/sites/${netlifySiteId}`, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${netlifyToken}`,
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      build_settings: {
-        env: {
-          NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN: apiToken,
-          NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID: buildTriggerId,
-          NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH: siteSearchToken,
-        },
+  await fetch(
+    `https://api.netlify.com/api/v1/accounts/${netlifyAccountId}/env?site_id=${netlifySiteId}`,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${netlifyToken}`,
       },
-    }),
-  });
+      method: 'POST',
+      body: JSON.stringify([
+        {
+          key: 'NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN',
+          values: [{ value: apiToken }],
+        },
+        {
+          key: 'NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID',
+          values: [{ value: buildTriggerId }],
+        },
+        {
+          key: 'NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH',
+          values: [{ value: siteSearchToken }],
+        },
+      ]),
+    }
+  );
 }
 
 export default async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return res.status(200).json({ success: true });
   }
 
-  if (req.method !== "POST") {
-    return res.status(404).json({ error: "Invalid route" });
+  if (req.method !== 'POST') {
+    return res.status(404).json({ error: 'Invalid route' });
   }
 
   try {
@@ -81,10 +90,10 @@ export default async (req, res) => {
     const accessTokens = await client.accessTokens.list();
 
     const siteSearchToken = accessTokens.find(
-      (token) => token.name === "Site Search"
+      (token) => token.name === 'Site Search'
     ).token;
 
-    if (req.body.integrationInfo.adapter === "vercel") {
+    if (req.body.integrationInfo.adapter === 'vercel') {
       await vercelInitialization(
         req.body.integrationInfo.vercelProjectId,
         req.body.integrationInfo.vercelTeamId,
@@ -94,13 +103,14 @@ export default async (req, res) => {
       );
     }
 
-    if (req.body.integrationInfo.adapter === "netlify") {
+    if (req.body.integrationInfo.adapter === 'netlify') {
       await netlifyInitialization(
         req.body.datocmsApiToken,
         req.body.integrationInfo.netlifySiteId,
         req.body.integrationInfo.netlifyToken,
         buildTriggerId,
-        siteSearchToken
+        siteSearchToken,
+        req.body.integrationInfo.netlifyAccountId
       );
     }
 
