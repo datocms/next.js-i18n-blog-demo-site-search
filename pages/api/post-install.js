@@ -57,10 +57,6 @@ async function netlifyInitialization(
       method: 'POST',
       body: JSON.stringify([
         {
-          key: 'NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN',
-          values: [{ value: apiToken }],
-        },
-        {
           key: 'NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID',
           values: [{ value: buildTriggerId }],
         },
