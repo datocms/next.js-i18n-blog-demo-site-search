@@ -34,11 +34,20 @@ async function netlifyInitialization(
   netlifySiteId,
   netlifyToken,
   buildTriggerId,
-  siteSearchToken,
-  netlifyAccountId
+  siteSearchToken
 ) {
+  const accountResponse = await (
+    await fetch('https://api.netlify.com/api/v1/accounts', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${netlifyToken}`,
+      },
+    })
+  ).json();
+
   await fetch(
-    `https://api.netlify.com/api/v1/accounts/${netlifyAccountId}/env?site_id=${netlifySiteId}`,
+    `https://api.netlify.com/api/v1/accounts/${accountResponse[0].id}/env?site_id=${netlifySiteId}`,
     {
       headers: {
         Accept: 'application/json',
@@ -109,8 +118,7 @@ export default async (req, res) => {
         req.body.integrationInfo.netlifySiteId,
         req.body.integrationInfo.netlifyToken,
         buildTriggerId,
-        siteSearchToken,
-        req.body.integrationInfo.netlifyAccountId
+        siteSearchToken
       );
     }
 
