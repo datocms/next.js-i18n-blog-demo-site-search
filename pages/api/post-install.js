@@ -118,7 +118,7 @@ export default async (req, res) => {
       );
     }
 
-    await client.buildTriggers.trigger(buildTriggerId);
+    await client.buildTriggers.reindex(buildTriggerId);
 
     return res.status(200).json({ success: siteSearchToken });
   } catch (error) {
