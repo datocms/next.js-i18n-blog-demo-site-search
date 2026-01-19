@@ -10,9 +10,9 @@ import Layout from "../../components/layout";
 
 export async function getServerSideProps(context) {
   const token = process.env.NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH;
-  const buildTriggerId = process.env.NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID;
+  const searchIndexId = process.env.NEXT_EXAMPLE_CMS_DATOCMS_SEARCH_INDEX_ID;
   return {
-    props: { token, buildTriggerId },
+    props: { token, searchIndexId },
   };
 }
 
@@ -26,7 +26,7 @@ export default function Search(props) {
 
   const { state, data } = useSiteSearch({
     client,
-    buildTriggerId: props.buildTriggerId,
+    searchIndexId: props.searchIndexId,
     initialState: { locale: router.locale },
     highlightMatch: (text, key, context) => <strong key={key}>{text}</strong>,
   });

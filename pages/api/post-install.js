@@ -4,7 +4,7 @@ async function vercelInitialization(
   vercelProjectId,
   vercelTeamId,
   vercelApiToken,
-  buildTriggerId,
+  searchIndexId,
   siteSearchToken
 ) {
   await fetch(`https://api.vercel.com/v10/projects/${vercelProjectId}/env`, {
@@ -15,8 +15,8 @@ async function vercelInitialization(
     body: JSON.stringify([
       {
         type: 'encrypted',
-        key: 'NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID',
-        value: buildTriggerId,
+        key: 'NEXT_EXAMPLE_CMS_DATOCMS_SEARCH_INDEX_ID',
+        value: searchIndexId,
         target: ['development', 'production', 'preview'],
       },
       {
@@ -33,7 +33,7 @@ async function netlifyInitialization(
   apiToken,
   netlifySiteId,
   netlifyToken,
-  buildTriggerId,
+  searchIndexId,
   siteSearchToken
 ) {
   const accountResponse = await (
@@ -57,8 +57,8 @@ async function netlifyInitialization(
       method: 'POST',
       body: JSON.stringify([
         {
-          key: 'NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID',
-          values: [{ value: buildTriggerId }],
+          key: 'NEXT_EXAMPLE_CMS_DATOCMS_SEARCH_INDEX_ID',
+          values: [{ value: searchIndexId }],
         },
         {
           key: 'NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH',
@@ -86,10 +86,12 @@ export default async (req, res) => {
     const client = buildClient({ apiToken: req.body.datocmsApiToken });
 
     const buildTriggers = await client.buildTriggers.list();
-    const buildTriggerId = buildTriggers[0].id;
+    const buildTrigger = buildTriggers[0];
 
-    await client.buildTriggers.update(buildTriggerId, {
-      indexing_enabled: true,
+    const searchIndex = await client.searchIndexes.create({
+      name: 'Website',
+      enabled: true,
+      frontend_url: buildTrigger.frontend_url,
     });
 
     const accessTokens = await client.accessTokens.list();
@@ -103,7 +105,7 @@ export default async (req, res) => {
         req.body.integrationInfo.vercelProjectId,
         req.body.integrationInfo.vercelTeamId,
         req.body.integrationInfo.vercelApiToken,
-        buildTriggerId,
+        searchIndex.id,
         siteSearchToken
       );
     }
@@ -113,12 +115,12 @@ export default async (req, res) => {
         req.body.datocmsApiToken,
         req.body.integrationInfo.netlifySiteId,
         req.body.integrationInfo.netlifyToken,
-        buildTriggerId,
+        searchIndex.id,
         siteSearchToken
       );
     }
 
-    await client.buildTriggers.reindex(buildTriggerId);
+    await client.searchIndexes.trigger(searchIndex.id);
 
     return res.status(200).json({ success: siteSearchToken });
   } catch (error) {
