@@ -53,8 +53,8 @@ export default function Search(props) {
               return (
                 <div key={result.id} className="mb-5">
                   <h3 className="text-3xl mb-3 leading-snug">
-                    <Link as={formatedSlug} href={formatedSlug}>
-                      <a className="hover:underline">{result.title}</a>
+                    <Link href={formatedSlug} className="hover:underline">
+                      {result.title}
                     </Link>
                   </h3>
                   <p className="text-lg leading-relaxed mb-4">

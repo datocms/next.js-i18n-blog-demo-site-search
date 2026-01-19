@@ -1,5 +1,24 @@
-/* purgecss start ignore */
-@tailwind base;
-@tailwind components;
-/* purgecss end ignore */
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme inline {
+  --color-accent-1: #FAFAFA;
+  --color-accent-2: #EAEAEA;
+  --color-accent-7: #333;
+  --color-success: #0070f3;
+  --color-cyan: #79FFE1;
+
+  --spacing-28: 7rem;
+
+  --tracking-tighter: -0.04em;
+
+  --leading-tight: 1.2;
+
+  --font-size-5xl: 2.5rem;
+  --font-size-6xl: 2.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6.25rem;
+
+  --shadow-small: 0 5px 10px rgba(0, 0, 0, 0.12);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
