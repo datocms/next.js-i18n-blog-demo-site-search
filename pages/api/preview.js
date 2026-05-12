@@ -1,15 +1,13 @@
 import url from 'url';
 
 export default async (req, res) => {
-  // Please set the NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET env variable
-  // on Vercel/Netlify, or everyone will be able to enter Preview Mode and
-  // see draft content!
-
+  const publicPreview =
+    process.env.NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW === 'true';
   const secret =
     process.env.NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET;
 
-  // Check the secret and next parameters
-  if (secret && req.query.secret !== secret) {
+  // Check the secret unless this deployment explicitly allows public preview.
+  if (!publicPreview && (!secret || req.query.secret !== secret)) {
     return res.status(401).json({ message: "Invalid token" });
   }
 

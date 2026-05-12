@@ -47,6 +47,7 @@ Then set each variable on `.env`:
 
 - `NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN` should be the API token you just copied.
 - `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET` can be any random string (but avoid spaces), like `MY_SECRET` - this is used for the Preview Mode](https://www.datocms.com/docs/next-js/setting-up-next-js-preview-mode). This token will be used for the preview mode - read on to know more.
+- `NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW` should stay `false` unless this is an official public demo where anyone can enter Preview Mode.
 - `NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH` should be the SiteSearch API token on your project
 - `NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID` should be the numerical string on the URL of the Build trigger associated with the project
 
@@ -55,6 +56,7 @@ Your `.env` file should look like this:
 ```bash
 NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN=...
 NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET=...
+NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW=false
 NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH=...
 NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID=...
 ```
