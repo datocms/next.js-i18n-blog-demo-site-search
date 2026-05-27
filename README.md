@@ -35,7 +35,7 @@ Once the setup of the project and repo is done, clone the repo locally.
 
 In your DatoCMS' project, go to the **Settings** menu at the top and click **API tokens**.
 
-Then click **Read-only API token** and copy the token.
+Create two DatoCMS API tokens: `CDA Only (Published)` and `CDA Only (Draft)`.
 
 Next, copy the `.env.example` file in this directory to `.env` (which will be ignored by Git):
 
@@ -45,7 +45,8 @@ cp .env.example .env
 
 Then set each variable on `.env`:
 
-- `NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN` should be the API token you just copied.
+- `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN` should be the `CDA Only (Published)` token.
+- `DATOCMS_DRAFT_CONTENT_CDA_TOKEN` should be the `CDA Only (Draft)` token.
 - `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET` can be any random string (but avoid spaces), like `MY_SECRET` - this is used for the Preview Mode](https://www.datocms.com/docs/next-js/setting-up-next-js-preview-mode). This token will be used for the preview mode - read on to know more.
 - `NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH` should be the SiteSearch API token on your project
 - `NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID` should be the numerical string on the URL of the Build trigger associated with the project
@@ -53,7 +54,8 @@ Then set each variable on `.env`:
 Your `.env` file should look like this:
 
 ```bash
-NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN=...
+DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN=...
+DATOCMS_DRAFT_CONTENT_CDA_TOKEN=...
 NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET=...
 NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH=...
 NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID=...

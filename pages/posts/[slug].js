@@ -108,7 +108,7 @@ export async function getStaticProps({ params, preview = false, locale }) {
         ? {
             ...graphqlRequest,
             initialData: await request(graphqlRequest),
-            token: process.env.NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN,
+            token: process.env.DATOCMS_DRAFT_CONTENT_CDA_TOKEN,
           }
         : {
             enabled: false,
