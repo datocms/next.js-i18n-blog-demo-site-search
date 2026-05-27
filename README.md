@@ -47,7 +47,9 @@ Then set each variable on `.env`:
 
 - `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN` should be the `CDA Only (Published)` token.
 - `DATOCMS_DRAFT_CONTENT_CDA_TOKEN` should be the `CDA Only (Draft)` token.
-- `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET` can be any random string (but avoid spaces), like `MY_SECRET` - this is used for the Preview Mode](https://www.datocms.com/docs/next-js/setting-up-next-js-preview-mode). This token will be used for the preview mode - read on to know more.
+- `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET` can be any random string (but avoid spaces), like `MY_SECRET`. Set this for private deployments. If it is set, Preview Mode only opens when the query string `secret` matches it.
+- `NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW` should be set to `true` only for public demo deployments that should let anyone enter Preview Mode. Leave it empty for private deployments.
+- If `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET` is set, the `secret` query string must match it, even when public preview is enabled. If it is unset, Preview Mode opens only when `NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW=true`.
 - `NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH` should be the SiteSearch API token on your project
 - `NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID` should be the numerical string on the URL of the Build trigger associated with the project
 
@@ -57,6 +59,7 @@ Your `.env` file should look like this:
 DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN=...
 DATOCMS_DRAFT_CONTENT_CDA_TOKEN=...
 NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET=...
+NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW=
 NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN_SITE_SEARCH=...
 NEXT_EXAMPLE_CMS_DATOCMS_BUILD_TRIGGER_ID=...
 ```
@@ -87,7 +90,7 @@ To enable the Preview Mode, go to this URL:
 http://localhost:3000/api/preview?secret=<secret>
 ```
 
-- `<secret>` should be the string you entered for `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET`.
+- `<secret>` should be the string you entered for `NEXT_EXAMPLE_CMS_DATOCMS_PREVIEW_SECRET`. Public demo deployments can omit this only when `NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW=true`.
 - `<slug>` should be the post's `slug` attribute (you can check on DatoCMS).
 
 You should now be able to see the updated title. To exit the preview mode, you can click **Click here to exit preview mode** at the top.

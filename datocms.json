@@ -15,6 +15,10 @@
     "DATOCMS_DRAFT_CONTENT_CDA_TOKEN": {
       "type": "datocmsAccessToken",
       "tokenName": "CDA Only (Draft)"
+    },
+    "NEXT_EXAMPLE_CMS_DATOCMS_PUBLIC_PREVIEW": {
+      "type": "string",
+      "value": "true"
     }
   }
 }
